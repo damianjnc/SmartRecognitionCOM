@@ -4,9 +4,9 @@ import image from './icons8-artificial-intelligence-100.png';
 
 const Logo = () => {
     return (
-        <div className='me4 mt0'>
+        <div className='ml4 mt0'>
             <Tilt className="Tilt br2 shadow-2" options={{ max : 55 }} style={{ height: 150, width: 150 }} >
-                <div className="Tilt-inner pa3"> <img style={{paddingTop: '5px'}} src={image}/> </div>
+                <div className="Tilt-inner pa3"> <img alt='logo' style={{paddingTop: '5px'}} src={image}/> </div>
             </Tilt>
         </div>
     );

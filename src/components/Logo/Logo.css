@@ -1,4 +1,5 @@
 .Tilt{
     background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(0,212,255,1) 0%, rgba(167,255,107,1) 36%);
-    margin-left: 10px;
+    position: inherit;
+    margin-left: 5rem;
 }
