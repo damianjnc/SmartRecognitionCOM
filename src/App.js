@@ -30,15 +30,24 @@ class App extends Component {
 
     state = {
         input: '',
-        imageUrl: ''
+        imageUrl: '',
+        box:{}
+    }
+
+    calculateFaceLocation = data => {
+      const face =  data.outputs[0].data.regions[0].region_info.bounding_box;
+      const image = document.getElementById('inputImage');
+      const width = Number(image.width);
+      const height = Number(image.height);
+      console.log(width, height);
     }
 
     handleInputChange = event => {
-       this.setState({input: event.target.value});
+        this.setState({input: event.target.value});
     }
 
     onButtonSubmit = () => {
-        this.setState({imageUrl: this.state.input })
+        this.setState({imageUrl: this.state.input})
 
         app.models
             .predict(
@@ -46,11 +55,11 @@ class App extends Component {
                 // URL
                 this.state.input
             )
-            .then(function(response) {
+            .then(function (response) {
                     // do something with responseconsole.log(response);
-                    console.log(response.outputs[0].data.regions[0].region_info.bounding_box)
+                    this.calculateFaceLocation(response)
                 },
-                function(err) {
+                function (err) {
                     // there was an error}
                 })
     }
@@ -59,12 +68,14 @@ class App extends Component {
         return (
             <div className="App">
                 <Particles className='particles'
-                    params={particlesOptions}
+                           params={particlesOptions}
                 />
                 <Navigation/>
                 <Logo/>
                 <Rank/>
-                <ImageLinkForm handleInputChange={this.handleInputChange} onButtonSubmit={this.onButtonSubmit} />
+                <ImageLinkForm
+                    handleInputChange={this.handleInputChange}
+                    onButtonSubmit={this.onButtonSubmit}/>
                 <FaceRecognition imageUrl={this.state.imageUrl}/>
             </div>
         )

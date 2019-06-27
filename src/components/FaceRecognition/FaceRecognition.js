@@ -5,6 +5,7 @@ const FaceRecognition = (props) => {
         <div className='center'>
             <div className='absolute mt2'>
                 <img
+                    id='inputImage'
                     src={props.imageUrl}
                     width='500px'
                     height='auto'
