@@ -9,6 +9,8 @@ import Navigation from './components/Navigation/Navigation';
 import Logo from './components/Logo/Logo';
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm';
 import Rank from './components/Rank/Rank';
+import SignInForm from './components/SignInForm/SignInForm';
+import Register from './components/Register/Register';
 
 const app = new Clarifai.App({
     apiKey: '13473d242ca84681b29763a85fe850a1'
@@ -31,15 +33,26 @@ class App extends Component {
     state = {
         input: '',
         imageUrl: '',
-        box:{}
+        box: {},
+        route: 'signin'
     }
 
     calculateFaceLocation = data => {
-      const face =  data.outputs[0].data.regions[0].region_info.bounding_box;
-      const image = document.getElementById('inputImage');
-      const width = Number(image.width);
-      const height = Number(image.height);
-      console.log(width, height);
+        const face = data.outputs[0].data.regions[0].region_info.bounding_box;
+        const image = document.getElementById('inputImage');
+        const width = Number(image.width);
+        const height = Number(image.height);
+        console.log(width, height);
+        return {
+            leftCol: face.left_col * width,
+            topRow: face.top_row * height,
+            rightCol: width - (face.right_col * width),
+            bottomRow: height - (face.bottom_row * height)
+        }
+    }
+
+    displayBox = box => {
+        this.setState({box: box})
     }
 
     handleInputChange = event => {
@@ -55,13 +68,15 @@ class App extends Component {
                 // URL
                 this.state.input
             )
-            .then(function (response) {
-                    // do something with responseconsole.log(response);
-                    this.calculateFaceLocation(response)
-                },
-                function (err) {
-                    // there was an error}
-                })
+            .then(response => {
+                // do something with responseconsole.log(response);
+                this.displayBox(this.calculateFaceLocation(response))
+            })
+            .catch(err => console.log(err))
+    }
+
+    handleRouteChange = (route) => {
+        this.setState({route: route})
     }
 
     render() {
@@ -70,13 +85,17 @@ class App extends Component {
                 <Particles className='particles'
                            params={particlesOptions}
                 />
-                <Navigation/>
-                <Logo/>
-                <Rank/>
-                <ImageLinkForm
-                    handleInputChange={this.handleInputChange}
-                    onButtonSubmit={this.onButtonSubmit}/>
-                <FaceRecognition imageUrl={this.state.imageUrl}/>
+                <Navigation onRouteChange={this.handleRouteChange} />
+                {this.state.route === 'signup' ? <div>
+                    <Logo/>
+                    <Rank/>
+                    <ImageLinkForm
+                        handleInputChange={this.handleInputChange}
+                        onButtonSubmit={this.onButtonSubmit}/>
+                    <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl}/>
+                </div>  : (this.state.route === 'signin' ? <SignInForm onRouteChange={this.handleRouteChange}/> :
+                <Register onRouteChange={this.onRouteChange} />)
+                }
             </div>
         )
     }
