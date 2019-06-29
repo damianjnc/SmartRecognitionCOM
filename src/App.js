@@ -85,7 +85,7 @@ class App extends Component {
                 <Particles className='particles'
                            params={particlesOptions}
                 />
-                <Navigation onRouteChange={this.handleRouteChange} />
+                <Navigation isSigned={this.state.route === 'signup'} onRouteChange={this.handleRouteChange} />
                 {this.state.route === 'signup' ? <div>
                     <Logo/>
                     <Rank/>
@@ -94,7 +94,7 @@ class App extends Component {
                         onButtonSubmit={this.onButtonSubmit}/>
                     <FaceRecognition box={this.state.box} imageUrl={this.state.imageUrl}/>
                 </div>  : (this.state.route === 'signin' ? <SignInForm onRouteChange={this.handleRouteChange}/> :
-                <Register onRouteChange={this.onRouteChange} />)
+                <Register onRouteChange={this.handleRouteChange} />)
                 }
             </div>
         )
